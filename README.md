@@ -3,6 +3,8 @@ This is some code that is supposed to explain how to decode and deal with raw pi
 
 Also, you are correct. My personal coding style is strange. I like using GOTO and handling important data in a managed global scope. Why? Because it is fun.
 
+also the pngs come from [here](http://www.schaik.com/pngsuite/)
+
 ## USAGE
 `python pixref.py the_png.png`
 

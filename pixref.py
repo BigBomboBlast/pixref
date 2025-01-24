@@ -164,7 +164,7 @@ def read_all_chunks():
     print("Chunks: ", [chunk_type for chunk_type, chunk_data in chunks])
     mystack.push(chunks)
     return parse_idhr_fields
-   
+
 def parse_idhr_fields():
     global mystack
     chunks = mystack.pop()
@@ -188,6 +188,12 @@ def parse_idhr_fields():
         print("TODO: interlacing is not currently supported. Exiting")
         exit()
 
+    if colort not in (0, 2, 3, 4, 6):
+        print("Problem: Unknown PNG format. Exiting.")
+        exit(1)
+    mystack.push(chunks)
+    uncompress_and_defilter_data()
+
     match colort:
         case 0:
             print(f"colort={colort}, greyscale format detected")
@@ -195,8 +201,6 @@ def parse_idhr_fields():
             if bitd not in (1, 2, 4, 8, 16):
                 print("Problem: invalid bit depth. Exiting")
                 exit(1)
-            mystack.push(chunks)
-            uncompress_and_defilter_data()
             mystack.push(False)
             return get_image_greyscale
         case 2:
@@ -205,8 +209,6 @@ def parse_idhr_fields():
             if bitd not in (8, 16):
                 print("Problem: invalid bit depth. Exiting")
                 exit(1)
-            mystack.push(chunks)
-            uncompress_and_defilter_data()
             mystack.push(False)
             return get_image_rgb
         case 3:
@@ -215,8 +217,6 @@ def parse_idhr_fields():
             if bitd not in (1, 2, 4, 8):
                 print("Problem: invalid bit depth. Exiting")
                 exit(1)
-            mystack.push(chunks)
-            uncompress_and_defilter_data()
             mystack.push(get_palette(chunks))
             return get_image_from_palette
         case 4:
@@ -225,8 +225,6 @@ def parse_idhr_fields():
             if bitd not in (8, 16):
                 print("Problem: invalid bit depth. Exiting")
                 exit(1)
-            mystack.push(chunks)
-            uncompress_and_defilter_data()
             mystack.push(True)
             return get_image_greyscale
         case 6:
@@ -235,8 +233,6 @@ def parse_idhr_fields():
             if bitd not in (8, 16):
                 print("Problem: invalid bit depth. Exiting")
                 exit(1)
-            mystack.push(chunks)
-            uncompress_and_defilter_data()
             mystack.push(True)
             return get_image_rgb
 
